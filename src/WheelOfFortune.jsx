@@ -16,41 +16,41 @@ export default function WheelOfFortune() {
         const width = 500;
         const height = 500;
         const radius = Math.min(width, height) / 2;
-    
+
         svg.attr('width', width).attr('height', height);
-    
+
         // Remove any existing <g> elements
         svg.selectAll('g').remove();
-    
+
         // Append a new <g> element and center it
         const g = svg.append('g')
             .attr('transform', `translate(${width / 2},${height / 2})`); // Center the <g> element
-    
+
         // Store the reference
         gRef.current = g;
-    
+
         const pie = d3.pie().value(1).padAngle(0.01);
         const arc = d3.arc().innerRadius(0).outerRadius(radius);
-    
+
         const data = Array.from({ length: segments }, (_, i) => ({
             name: names[i % names.length],
-            color: i % 2 === 0 ? '#FDD518' : '#F01AC9'
+            color: i % 2 === 0 ? '#6CA9F5' : '#1B81FD'
         }));
-    
+
         const arcs = g.selectAll('.arc')
             .data(pie(data))
             .enter().append('g')
             .attr('class', 'arc');
-    
+
         arcs.append('path')
             .attr('d', arc)
             .attr('fill', d => d.data.color);
-    
+
         arcs.append('text')
             .attr('transform', d => {
                 const centroid = arc.centroid(d);
                 const angle = (d.startAngle + d.endAngle) / 2;
-                
+
                 // Adjust rotation to ensure text is readable and aligned properly
                 return `translate(${centroid[0]}, ${centroid[1]})
                         rotate(${angle * 180 / Math.PI - 90})`; // Adjust rotation
@@ -58,10 +58,10 @@ export default function WheelOfFortune() {
             .attr('dy', '.35em')
             .text(d => d.data.name)
             .attr('text-anchor', 'middle')
-            .attr('fill', '#000')
+            .attr('fill', '#fff')
             .style('font-size', '18px');
     }, []);
-    
+
 
     const spinWheel = () => {
         if (spinning) return;
@@ -109,10 +109,11 @@ export default function WheelOfFortune() {
             </button>
             {result && (
                 <div className="result-popup">
-                    {`Winner: ${result}`}
+                    <span className="winner-text">Winner:</span> <span className="result-text">{result}</span>
                     <Confetti />
                 </div>
             )}
+
         </div>
     );
 }
