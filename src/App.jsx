@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <h1>Ruby the Rabbitfoot's Magic Casino</h1>
+      <h1 className='title'>Ruby the Rabbitfoot's Magic Casino</h1>
       <WheelOfFortune/>
     </>
   )
