@@ -1,48 +1,62 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './WheelOfFortune.css';
 import Confetti from 'react-confetti';
 
 export default function WheelOfFortune() {
-  const names = Array.from({ length: 22 }, (_, i) => (i % 2 === 0 ? 'Christina' : 'Josh'));
-  const [result, setResult] = useState(null);
-  const [spinning, setSpinning] = useState(false);
+    const segments = 12;
+    const names = ['Christina', 'Josh'];
+    const [result, setResult] = useState(null);
+    const [spinning, setSpinning] = useState(false);
+    const wheelRef = useRef(null);
+    const degreesPerSegment = 360 / segments;
+    
+    const spinWheel = () => {
+        setSpinning(true);
+        setResult(null);
 
-  const spinWheel = () => {
-    setSpinning(true);
-    setResult(null);
+        const duration = 4; // duration in seconds
+        const rotations = 4; // number of full rotations
+        
+        const extraRotation = Math.floor(Math.random() * segments) * degreesPerSegment;
+        const totalRotation = rotations * 360 + extraRotation;
 
-    const duration = 4; // duration in seconds
+        wheelRef.current.style.transition = `transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+        wheelRef.current.style.transform = `rotate(${totalRotation}deg)`;
 
-    setTimeout(() => {
-      const finalResult = names[Math.floor(Math.random() * names.length)];
-      setResult(finalResult);
-      setSpinning(false);
-    }, duration * 1000);
-  };
+        setTimeout(() => {
+            const winningIndex = segments - 1 - Math.floor(extraRotation / degreesPerSegment);
+            setResult(names[winningIndex % 2]);
+            setSpinning(false);
+        }, duration * 1000);
+    };
 
-  const isEven = (num) => num % 2 || num == 0;
 
-  return (
-    <div className="wheel-container">
-      <div className={`wheel ${spinning ? 'spinning' : ''}`}>
-        {names.map((name, index) => (
-          <div
-            key={index}
-            id="segment"
-            style={{
-              transform: `rotate(${(index * 360) / names.length}deg)skewY(-45deg)`,
-              backgroundColor: isEven(index) ? '#F01AC9' : '#FDD518',
-              color: '#000',
-            }}
-          >
-            <div id="segment-text">{name}</div>
-             
-          </div>
-        ))}
+    return (
+    <div className="casino-container">
+      <div className="wheel-container">
+        <div ref={wheelRef} className={`wheel ${spinning ? 'spinning' : ''}`}>
+          {Array.from({ length: segments }).map((_, segmentIndex) => {
+            const segmentStyle = {
+              transform: `rotate(${(segmentIndex * degreesPerSegment)}deg)`,
+              backgroundColor: segmentIndex % 2 === 0 ? '#FDD518' : '#F01AC9',
+            };
+
+            return (
+              <div
+                key={segmentIndex}
+                className="segment"
+                style={segmentStyle}
+              >
+                <span className="name">
+                  {names[segmentIndex % names.length]}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="ticker"></div>
       </div>
-      <div className="ticker"></div>
-      <button onClick={spinWheel} disabled={spinning}>
+      <button className="button" onClick={spinWheel} disabled={spinning}>
         Spin the Wheel
       </button>
       {result && (
@@ -54,5 +68,3 @@ export default function WheelOfFortune() {
     </div>
   );
 }
-
-
