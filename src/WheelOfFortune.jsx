@@ -4,13 +4,15 @@ import Confetti from 'react-confetti';
 import * as d3 from 'd3';
 
 export default function WheelOfFortune() {
-    const segments = 12;
-    const names = ['Christina', 'Josh'];
-    const [result, setResult] = useState(null);
-    const [spinning, setSpinning] = useState(false);
-    const svgRef = useRef(null);
-    const gRef = useRef(null);
+    const segments = 22; // Number of segments
+    const names = ['Christina', 'Josh']; // Segment names
+    const [result, setResult] = useState(null); // State to hold the winner
+    const [spinning, setSpinning] = useState(false); // State to determine if the wheel is spinning
 
+    const svgRef = useRef(null); // Reference to the SVG element
+    const gRef = useRef(null); // Reference to the group element within the SVG
+
+    // Create the wheel SVG using D3
     useEffect(() => {
         const svg = d3.select(svgRef.current);
         const width = 500;
@@ -62,47 +64,71 @@ export default function WheelOfFortune() {
             .style('font-size', '18px');
     }, []);
 
+    
 
     const spinWheel = () => {
         if (spinning) return;
-
+    
         setSpinning(true);
         setResult(null);
-
+    
         const duration = 4000;
         const rotations = 4;
-        const extraRotation = Math.floor(Math.random() * segments) * (360 / segments);
-        const totalRotation = rotations * 360 + extraRotation;
-
+        const segmentAngle = 360 / segments;
+        const extraRotation = Math.floor(Math.random() * segments) * segmentAngle;
+    
+        // Calculate the total rotation to ensure the winning segment ends at 3:00
+        const totalRotation = rotations * 360 + extraRotation + 90; // Adding 90 degrees to align with 3:00 mark
+    
         if (!gRef.current) {
             console.error('gRef.current is not defined');
             setSpinning(false);
             return;
         }
-
+    
         // Get current transform to maintain the center position
         const currentTransform = gRef.current.attr('transform');
         const transformRegex = /rotate\(([^)]+)\)/;
         const currentRotationMatch = transformRegex.exec(currentTransform);
         const currentRotation = currentRotationMatch ? parseFloat(currentRotationMatch[1]) : 0;
-
+    
         gRef.current
             .transition()
             .duration(duration)
             .ease(d3.easeQuadInOut)
             .attrTween('transform', () => t => `${currentTransform} rotate(${t * totalRotation + currentRotation})`)
             .on('end', () => {
-                const winningIndex = segments - 1 - Math.floor(extraRotation / (360 / segments));
-                setResult(names[winningIndex % 2]);
+                const winningIndex = segments - 1 - Math.floor(extraRotation / segmentAngle);
+                const selectedSegment = names[winningIndex % names.length];
+                setResult(selectedSegment);
                 setSpinning(false);
+    
+                // Highlight the winning segment
+                gRef.current.selectAll('.arc')
+                    .filter((d, i) => i === winningIndex)
+                    .select('path')
+                    .attr('class', 'winning-segment');
             });
+    };
+
+    // Compute the angle for the winning segment
+    const getWinningSegmentAngle = () => {
+        if (result !== null) {
+            const winningIndex = names.indexOf(result);
+            const segmentAngle = 360 / segments;
+            return winningIndex * segmentAngle + segmentAngle / 2 - 90; // Middle of the segment
+        }
+        return 0;
     };
 
     return (
         <div className="casino-container">
             <div className="wheel-container">
                 <svg ref={svgRef}></svg>
-                <div className="ticker"></div>
+                <div
+                    className="ticker"
+                   
+                ></div>
             </div>
             <button className="button" onClick={spinWheel} disabled={spinning}>
                 Spin the Wheel
@@ -113,7 +139,6 @@ export default function WheelOfFortune() {
                     <Confetti />
                 </div>
             )}
-
         </div>
     );
 }

@@ -12,18 +12,20 @@
     height: 500px;
   }
   
+
   .ticker {
     position: absolute;
-    top: 60%;
-    right: -5px;
+    top: 50%;
+    right: -20px; /* Adjust as needed to position the ticker correctly */
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-right: 20px solid rgb(255, 213, 0);
+    border-right: 20px solid rgb(255, 213, 0); /* Arrow pointing left */
+    border-left: none;
     transform: translateY(-50%);
-  }
-  
+}
+
   .button {
     margin-top: 50px;
     padding: 10px 20px;
@@ -40,7 +42,7 @@
     transform: scale(1.1);
   }
   .button:disabled {
-    background-color: #d94c4c;
+    background-color: #64ad6c;
     cursor: not-allowed;
   }
   

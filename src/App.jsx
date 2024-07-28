@@ -1,5 +1,7 @@
 
 import './App.css'
+import Testing from './Testing'
+
 import WheelOfFortune from './WheelOfFortune'
 
 function App() {
@@ -8,7 +10,7 @@ function App() {
   return (
     <>
      
-      < WheelOfFortune/>
+      < Testing/>
     </>
   )
 }
