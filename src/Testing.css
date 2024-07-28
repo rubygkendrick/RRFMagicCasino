@@ -50,7 +50,7 @@ h1 {
 #arrow {
     position: absolute;
     left: calc(50% - 10px);
-    top: -40px;
+    top: -50px;
     cursor: pointer;
     transition: 5s;
     transform-origin: top center;
@@ -60,6 +60,8 @@ h1 {
     border-width: 50px 10px 0 10px;
     border-color: rgba(255, 215, 0, 1) transparent transparent transparent;
 }
+
+
 
 .arrowanimation {
     animation: arrowanimation 5s linear;

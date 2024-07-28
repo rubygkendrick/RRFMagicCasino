@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Testing.css';
 
+
 export const Testing = () => {
     const [deg, setDeg] = useState(7.5);
     const [jackpot, setJackpot] = useState("no one");
@@ -12,69 +13,70 @@ export const Testing = () => {
         const handleSpin = () => {
             arrowRef.current.removeEventListener('click', handleSpin);
 
-            arrowRef.current.classList.add('arrowanimation');
-            const newDeg = deg + 180 + (15 * random(0, 24));
+            // Generate a high rotation value for fast spin
+            const spinDuration = 5000; // Duration of the spin
+            const newDeg = deg + 360 * 10 + 180 + (15 * random(0, 24)); 
             setDeg(newDeg);
 
+            // Remove transition, force reflow, and then set new transition
+            wheelRef.current.style.transition = 'none';
+            wheelRef.current.style.transform = `rotate(${deg}deg)`;
+            wheelRef.current.offsetHeight; // Force reflow
+            wheelRef.current.style.transition = `transform ${spinDuration}ms ease-out`;
             wheelRef.current.style.transform = `rotate(${newDeg}deg)`;
 
+            // Get the position after rotation
             const newPosition = newDeg % 360;
             console.log(newPosition + " position");
 
             let newScore = score;
             let newJackpot = jackpot;
 
-            if ([7.5, 172.5, 202.5].includes(newPosition)) {
-                newScore += 800;
-                newJackpot = "Christina";
-            } else if ([22.5, 157.5, 217.5].includes(newPosition)) {
-                newScore += 700;
-                newJackpot = "Josh";
-            } else if ([37.5, 247.5].includes(newPosition)) {
-                newScore += 500;
-                newJackpot = "Christina";
-            } else if ([52.5, 82.5, 292.5].includes(newPosition)) {
-                newScore += 200;
-                newJackpot = "Josh";
-            } else if ([67.5, 307.5].includes(newPosition)) {
-                newScore += 100;
-                newJackpot = "Josh";
-            } else if (newPosition === 97.5) {
-                newScore += 300;
-                newJackpot = "Josh";
-            } else if (newPosition === 112.5) {
-                newScore += 400;
-                newJackpot = "Christina";
-            } else if (newPosition === 127.5) {
-                newScore += 100;
-                newJackpot = "Josh";
-            } else if (newPosition === 142.5) {
-                newScore += 600;
-                newJackpot = "Christina";
-            } else if (newPosition === 187.5 || newPosition === 322.5 || newPosition === 352.5) {
-                newJackpot = "Josh";
-            } else if (newPosition === 232.5) {
-                newJackpot = "Christina";
-            } else if (newPosition === 277.5) {
-                newJackpot = "Josh";
-            } else if (newPosition === 337.5) {
-                newJackpot = "Christina";
-                // Uncomment the next line to add sound effect
-                // _jackpotSound.play();
+            const positionToNameMap = {
+                7.5: "Josh",
+                22.5: "Christina",
+                37.5: "Josh",
+                52.5: "Christina",
+                67.5: "Josh",
+                82.5: "Christina",
+                97.5: "Josh",
+                112.5: "Christina",
+                127.5: "Josh",
+                142.5: "Christina",
+                157.5: "Josh",
+                172.5: "Christina",
+                187.5: "Josh",
+                202.5: "Christina",
+                217.5: "Josh",
+                232.5: "Christina",
+                247.5: "Josh",
+                262.5: "Christina",
+                277.5: "Josh",
+                292.5: "Christina",
+                307.5: "Josh",
+                322.5: "Christina",
+                337.5: "Josh",
+                352.5: "Christina"
+            };
+
+            if (positionToNameMap.hasOwnProperty(newPosition)) {
+                newJackpot = positionToNameMap[newPosition];
             }
 
+            // Remove the transition after spin is done
             setTimeout(() => {
+                wheelRef.current.style.transition = 'none'; // Remove transition
                 arrowRef.current.addEventListener('click', handleSpin);
-                arrowRef.current.classList.remove('arrowanimation');
                 setScore(newScore);
                 setJackpot(newJackpot);
-            }, 5000);
+            }, spinDuration); // Timeout to match the animation duration
         };
 
         arrowRef.current.addEventListener('click', handleSpin);
         return () => {
             arrowRef.current.removeEventListener('click', handleSpin);
         };
+        
     }, [deg, score, jackpot]);
 
     const random = (min, max) => Math.round(Math.random() * (max - min) + min);
@@ -88,7 +90,6 @@ export const Testing = () => {
                 <div id="wheel" ref={wheelRef}></div>
                 <div id="middle">{jackpot}!</div>
             </div>
-            <div id="score">Score = ${score}</div>
         </div>
     );
 };
