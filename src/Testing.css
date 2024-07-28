@@ -7,13 +7,14 @@
 body {
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
-    background-color: #eaeaea;
+    background-color: #4b4848;
+    color: white;
 }
 
 #container {
     width: 400px;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 7rem;
     position: relative;
     text-align: center;
 }
@@ -25,7 +26,7 @@ h1 {
 
 #spin {
     margin-bottom: 75px;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 #jackpot,
@@ -49,15 +50,15 @@ h1 {
 #arrow {
     position: absolute;
     left: calc(50% - 10px);
-    top: -50px;
+    top: -40px;
     cursor: pointer;
     transition: 5s;
     transform-origin: top center;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 40px 10px 0 10px;
-    border-color: gold transparent transparent transparent;
+    border-width: 50px 10px 0 10px;
+    border-color: rgba(255, 215, 0, 1) transparent transparent transparent;
 }
 
 .arrowanimation {
@@ -116,13 +117,13 @@ h1 {
 }
 
 #middle {
-    width: 150px;
-    height: 150px;
+    width: 130px; /* Adjust width to make the circle smaller */
+    height: 130px; /* Adjust height to make the circle smaller */
     border-radius: 50%;
-    background-color: white;
+    background-color: #4b4848;
     position: absolute;
-    top: 125px;
-    left: 125px;
+    top: 135px; /* Adjust top to keep the circle centered */
+    left: 135px; /* Adjust left to keep the circle centered */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,7 +132,7 @@ h1 {
 }
 
 #wheel {
-    background-image: url(https://lh3.google.com/u/0/d/18e0kJ1HlJFoAuhg6EI32XOywy3pYI-rw=w1920-h887-iv1);
+    background-image: url('/images/wheel-image.png');
     width: 400px;
     height: 400px;
     background-size: contain;

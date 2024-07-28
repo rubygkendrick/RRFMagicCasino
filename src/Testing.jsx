@@ -3,7 +3,7 @@ import './Testing.css';
 
 export const Testing = () => {
     const [deg, setDeg] = useState(7.5);
-    const [jackpot, setJackpot] = useState(0);
+    const [jackpot, setJackpot] = useState("no one");
     const [score, setScore] = useState(0);
     const arrowRef = useRef(null);
     const wheelRef = useRef(null);
@@ -26,43 +26,39 @@ export const Testing = () => {
 
             if ([7.5, 172.5, 202.5].includes(newPosition)) {
                 newScore += 800;
-                newJackpot += 800;
+                newJackpot = "Christina";
             } else if ([22.5, 157.5, 217.5].includes(newPosition)) {
                 newScore += 700;
-                newJackpot += 700;
+                newJackpot = "Josh";
             } else if ([37.5, 247.5].includes(newPosition)) {
                 newScore += 500;
-                newJackpot += 500;
+                newJackpot = "Christina";
             } else if ([52.5, 82.5, 292.5].includes(newPosition)) {
                 newScore += 200;
-                newJackpot += 200;
+                newJackpot = "Josh";
             } else if ([67.5, 307.5].includes(newPosition)) {
                 newScore += 100;
-                newJackpot += 100;
+                newJackpot = "Josh";
             } else if (newPosition === 97.5) {
                 newScore += 300;
-                newJackpot += 300;
+                newJackpot = "Josh";
             } else if (newPosition === 112.5) {
                 newScore += 400;
-                newJackpot += 400;
+                newJackpot = "Christina";
             } else if (newPosition === 127.5) {
                 newScore += 100;
-                newJackpot += 100;
+                newJackpot = "Josh";
             } else if (newPosition === 142.5) {
                 newScore += 600;
-                newJackpot += 600;
+                newJackpot = "Christina";
             } else if (newPosition === 187.5 || newPosition === 322.5 || newPosition === 352.5) {
-                newJackpot += newScore;
-                newScore = 0;
+                newJackpot = "Josh";
             } else if (newPosition === 232.5) {
-                newScore += 600;
-                newJackpot += 600;
+                newJackpot = "Christina";
             } else if (newPosition === 277.5) {
-                newScore += 300;
-                newJackpot += 300;
+                newJackpot = "Josh";
             } else if (newPosition === 337.5) {
-                newScore += newJackpot;
-                newJackpot = 0;
+                newJackpot = "Christina";
                 // Uncomment the next line to add sound effect
                 // _jackpotSound.play();
             }
@@ -85,12 +81,12 @@ export const Testing = () => {
 
     return (
         <div id="container">
-            <h1>Wheel of Fortune</h1>
-            <div id="spin">"Click arrow to spin!"</div>
+            <h1>LET's WIN A ROKU</h1>
+            <div id="spin">Click arrow to spin!</div>
             <div id="wheel_comp">
                 <div id="arrow" ref={arrowRef}></div>
                 <div id="wheel" ref={wheelRef}></div>
-                <div id="middle">Jackpot = ${jackpot}</div>
+                <div id="middle">{jackpot}!</div>
             </div>
             <div id="score">Score = ${score}</div>
         </div>
